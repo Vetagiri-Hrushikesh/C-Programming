@@ -5,8 +5,6 @@ int main(int argc, char **argv)
     int sockfd, n;
     int sendBytes;
     struct sockaddr_in servaddr;
-    char sendLine[MAXLINE];
-    char receiveLine[MAXLINE];
 
     if (argc != 2)
         err_n_die("usage: %s <server address>", argv[0]);
@@ -24,19 +22,12 @@ int main(int argc, char **argv)
     if (connect(sockfd, (SA *)&servaddr, sizeof(servaddr)) < 0)
         err_n_die("Connection failed");
 
-    sprintf(sendLine, "GET / HTPP/1.1\r\n\r\n");
-    sendBytes = strlen(sendLine);
-
-    if (write(sockfd, sendLine, sendBytes) != sendBytes)
-        err_n_die("Write Error");
-
-    memset(receiveLine, 0, MAXLINE);
-    while ((n = read(sockfd, receiveLine, MAXLINE - 1)) > 0)
-        printf("%s", receiveLine);
+    int fromServ;
+    while ((n = read(sockfd, &fromServ, sizeof(fromServ))) > 0)
+        printf("%d\n", ntohl(fromServ));
 
     if (n < 0)
         err_n_die("read error");
 
     exit(0);
 }
-

@@ -15,11 +15,21 @@
 #include <sys/time.h>
 #include <sys/ioctl.h>
 #include <netdb.h>
+#include <pthread.h>
 
 #define SERVER_PORT 8080
 #define MAXLINE 4096
 #define SA struct sockaddr
 void err_n_die(const char *fmt, ...);
-char *bin2hex(const unsigned char *input, size_t len);
+void signal_handler(int signal_number);
+void *connectionHandler(void *clientSockData);
+
+typedef struct __clientSockSt
+{
+    int th_id;
+    int server_port;
+    int serAcpSock;
+    struct sockaddr_in cliSockaddr;
+} ClientSockSt;
 
 #endif
