@@ -26,11 +26,16 @@ int main(int argc, char **argv)
     {
         struct sockaddr_in addr;
         socklen_t addr_len;
+        char clientAddress[MAXLINE + 1];
+
         printf("Waiting for the connection on port %d", SERVER_PORT);
         fflush(stdout);
-        cliSocfd = accept(lisSocfd, (SA *)NULL, NULL);
-        memset(recvLine, 0, MAXLINE);
+        cliSocfd = accept(lisSocfd, (SA *)&addr, &addr_len);
 
+        inet_ntop(AF_INET, &addr, clientAddress, MAXLINE);
+        printf("Client connection :  %s\n", clientAddress);
+        
+        memset(recvLine, 0, MAXLINE);
         while ((n = read(cliSocfd, recvLine, MAXLINE - 1)) > 0)
         {
             fprintf(stdout, "\n%s\n\n%s", bin2hex(recvLine, n), recvLine);
