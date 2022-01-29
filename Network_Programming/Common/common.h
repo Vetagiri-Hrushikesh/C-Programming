@@ -17,7 +17,7 @@
 #include <netdb.h>
 #include <pthread.h>
 
-#define SERVER_PORT 8080
+#define SERVER_PORT 8090
 #define MAXLINE 4096
 #define SA struct sockaddr
 void err_n_die(const char *fmt, ...);
